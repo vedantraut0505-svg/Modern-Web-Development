@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Dev Practical - Product Showcase</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom Tailwind config just in case we need extra tweaks
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        studentBlue: '#3b82f6',
+                        studentDark: '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-200 selection:text-indigo-900">
+
+    <!-- Navbar: Mobile friendly with hamburger toggle -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo / Practical Title -->
+                <div class="flex items-center space-x-3">
+                    <span class="bg-indigo-600 text-white font-mono text-xs px-2 py-1 rounded font-bold"></span>
+                    <span class="font-bold text-lg text-slate-900 tracking-tight">UrbanVibe Collection</span>
+                </div>
+
+                <!-- Desktop Nav Links -->
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
+                    <a href="#hero" class="hover:text-indigo-600 transition">Home</a>
+                    <a href="#features" class="hover:text-indigo-600 transition">Responsive Flex</a>
+                    <a href="#products" class="hover:text-indigo-600 transition">Showcase Grid</a>
+                    <a href="#specs" class="hover:text-indigo-600 transition">Breakpoints Info</a>
+                </nav>
+
+                <!-- Action Button -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <button onclick="toggleCartModal()" class="relative bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
+                        🛒 Cart <span id="cart-count" class="bg-indigo-600 text-white text-xs px-1.5 py-0.5 rounded-full">0</span>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex md:hidden items-center">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+            <a href="#hero" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Home</a>
+            <a href="#features" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Responsive Flex</a>
+            <a href="#products" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Showcase Grid</a>
+            <a href="#specs" onclick="toggleMobileMenu()" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100">Breakpoints Info</a>
+            <button onclick="toggleCartModal(); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-indigo-50 text-indigo-700">🛒 View Cart (<span id="mobile-cart-count">0</span>)</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative overflow-hidden bg-gradient-to-b from-indigo-900 via-slate-900 to-slate-950 text-white py-16 md:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Flex container: column on mobile, row on large screens -->
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+                <!-- Text Content -->
+                <div class="w-full lg:w-1/2 text-center lg:text-left space-y-6">
+                    <div class="inline-flex items-center gap-2 bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+                        Seamless Viewing on <span class="text-indigo-400 underline decoration-indigo-500/50">Any Device</span>
+                    </h1>
+                    <p class="text-lg text-slate-300 max-w-xl mx-auto lg:mx-0">
+                        Built with Tailwind CSS Flexbox and responsive breakpoints (`sm:`, `md:`, `lg:`). Designed to adapt cleanly whether viewed on an iPhone SE or a 4K desktop monitor!
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#products" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-indigo-600/30 transition text-center">
+                            Explore Collection 🚀
+                        </a>
+                        <a href="#specs" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-6 py-3 rounded-xl transition text-center">
+                            View CSS Specs 💻
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Image / Visual Mockup Card -->
+                <div class="w-full lg:w-1/2 flex justify-center">
+                    <div class="relative w-full max-w-md bg-slate-800/80 border border-slate-700 p-6 rounded-2xl shadow-2xl backdrop-blur">
+                        <div class="absolute -top-3 -right-3 bg-emerald-500 text-white text-xs px-2.5 py-1 rounded-full font-mono shadow">
+                            Responsive ✅
+                        </div>
+                        <div class="space-y-4">
+                            <div class="h-48 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-inner">
+                                <img src="https://placehold.co/500x350/4f46e5/ffffff?text=UrbanVibe+Hero+Mockup" alt="Hero Mockup" class="w-full h-full object-cover rounded-xl" onerror="this.src='https://placehold.co/500x350/334155/ffffff?text=Product+Fallback'">
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-slate-400">Breakpoint Active:</span>
+                                <span id="current-breakpoint" class="font-mono bg-slate-900 text-indigo-400 px-2 py-0.5 rounded border border-slate-700">Detecting...</span>
+                            </div>
+                            <div class="text-xs text-slate-400 italic">
+                                Note: Resize window to test Tailwind flex wrap & grid column shifts!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Assignment Note Banner -->
+    <section class="bg-amber-50 border-y border-amber-200 py-3 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-sm text-amber-900 gap-2 text-center sm:text-left">
+            <div class="flex items-center gap-2">
+                <span>💡</span>
+                <span><strong>Assignment Objective:</strong> Demonstrate mastery of Tailwind Flexbox, spacing, and responsive media queries (`sm`, `md`, `lg`).</span>
+            </div>
+            <div class="font-mono text-xs bg-amber-200/60 px-2 py-1 rounded text-amber-950 font-semibold">
+                Status: Completed & Tested on Mobile & Desktop
+            </div>
+        </div>
+    </section>
+
+    <!-- Responsive Features Flex Section -->
+    <section id="features" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 tracking-tight">How Responsiveness Works Here</h2>
+                <p class="text-slate-600 mt-2">Using Flexbox properties (`flex-col`, `md:flex-row`, `flex-wrap`, `justify-between`) for fluid scaling.</p>
+            </div>
+
+            <!-- Flexbox container showcasing responsive alignment -->
+            <div class="flex flex-col md:flex-row gap-6">
+                <!-- Feature 1 -->
+                <div class="flex-1 bg-slate-50 border border-slate-200 p-6 rounded-2xl hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center font-bold mb-4 text-lg">📱</div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-1">Mobile Viewport</h3>
+                    <p class="text-slate-600 text-sm">Stacked single-column layouts (`flex-col`) ensure zero horizontal scrolling on narrow smartphone screens.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="flex-1 bg-slate-50 border border-slate-200 p-6 rounded-2xl hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center font-bold mb-4 text-lg">💻</div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-1">Desktop Viewport</h3>
+                    <p class="text-slate-600 text-sm">Multi-column grids (`md:grid-cols-2 lg:grid-cols-3`) expand gracefully to utilize large monitor estate.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="flex-1 bg-slate-50 border border-slate-200 p-6 rounded-2xl hover:shadow-md transition">
+                    <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center font-bold mb-4 text-lg">⚡</div>
+                    <h3 class="font-bold text-lg text-slate-900 mb-1">Tailwind CDN</h3>
+                    <p class="text-slate-600 text-sm">Loaded instantly via standard CDN script tag without complicated npm build steps or setup.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase Grid Section -->
+    <section id="products" class="py-16 bg-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
+                <div>
+                    <span class="text-indigo-600 font-semibold text-sm uppercase tracking-wider">Product Showcase</span>
+                    <h2 class="text-3xl font-bold text-slate-900 tracking-tight">New Collection 2026</h2>
+                </div>
+                <!-- Filter buttons -->
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="filterProducts('all')" class="filter-btn active bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm">All Items</button>
+                    <button onclick="filterProducts('apparel')" class="filter-btn bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-lg text-sm font-medium transition">Apparel</button>
+                    <button onclick="filterProducts('accessories')" class="filter-btn bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 px-4 py-2 rounded-lg text-sm font-medium transition">Accessories</button>
+                </div>
+            </div>
+
+            <!-- Product Grid: 1 col on mobile, 2 cols on sm/md, 3 cols on lg -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col" data-category="apparel">
+                    <div class="relative bg-slate-200 h-64 overflow-hidden group">
+                        <span class="absolute top-3 left-3 bg-amber-500 text-white text-xs px-2.5 py-1 rounded-md font-semibold z-10 shadow">New Arrival</span>
+                        <img src="https://placehold.co/600x600/3b82f6/ffffff?text=Urban+Hoodie" alt="Urban Hoodie" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x600/e2e8f0/64748b?text=Hoodie+Image'">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h3 class="font-bold text-lg text-slate-900">Oversized Urban Hoodie</h3>
+                                <span class="text-indigo-600 font-bold">$59.99</span>
+                            </div>
+                            <p class="text-slate-500 text-sm mb-4">Heavyweight cotton fleece designed for maximum comfort on chilly campus days.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="addToCart('Oversized Urban Hoodie', 59.99)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                                🛒 Add to Cart
+                            </button>
+                            <button onclick="quickView('Oversized Urban Hoodie', '$59.99', 'Heavyweight cotton fleece designed for maximum comfort.', 'https://placehold.co/600x600/3b82f6/ffffff?text=Urban+Hoodie')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-2.5 rounded-xl transition text-sm" title="Quick View">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col" data-category="accessories">
+                    <div class="relative bg-slate-200 h-64 overflow-hidden group">
+                        <span class="absolute top-3 left-3 bg-indigo-600 text-white text-xs px-2.5 py-1 rounded-md font-semibold z-10 shadow">Best Seller</span>
+                        <img src="https://placehold.co/600x600/10b981/ffffff?text=Minimalist+Watch" alt="Minimalist Watch" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x600/e2e8f0/64748b?text=Watch+Image'">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h3 class="font-bold text-lg text-slate-900">Minimalist Steel Watch</h3>
+                                <span class="text-indigo-600 font-bold">$129.00</span>
+                            </div>
+                            <p class="text-slate-500 text-sm mb-4">Sleek matte black finish with genuine leather strap. Water resistant up to 30m.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="addToCart('Minimalist Steel Watch', 129.00)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                                🛒 Add to Cart
+                            </button>
+                            <button onclick="quickView('Minimalist Steel Watch', '$129.00', 'Sleek matte black finish with genuine leather strap.', 'https://placehold.co/600x600/10b981/ffffff?text=Minimalist+Watch')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-2.5 rounded-xl transition text-sm" title="Quick View">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col" data-category="accessories">
+                    <div class="relative bg-slate-200 h-64 overflow-hidden group">
+                        <span class="absolute top-3 left-3 bg-purple-600 text-white text-xs px-2.5 py-1 rounded-md font-semibold z-10 shadow">Limited Stock</span>
+                        <img src="https://placehold.co/600x600/8b5cf6/ffffff?text=Canvas+Backpack" alt="Canvas Backpack" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x600/e2e8f0/64748b?text=Backpack+Image'">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h3 class="font-bold text-lg text-slate-900">Utility Canvas Backpack</h3>
+                                <span class="text-indigo-600 font-bold">$79.50</span>
+                            </div>
+                            <p class="text-slate-500 text-sm mb-4">Padded laptop compartment, dual water bottle pockets, and durable waxed canvas.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="addToCart('Utility Canvas Backpack', 79.50)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                                🛒 Add to Cart
+                            </button>
+                            <button onclick="quickView('Utility Canvas Backpack', '$79.50', 'Padded laptop compartment with durable waxed canvas.', 'https://placehold.co/600x600/8b5cf6/ffffff?text=Canvas+Backpack')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-2.5 rounded-xl transition text-sm" title="Quick View">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col" data-category="apparel">
+                    <div class="relative bg-slate-200 h-64 overflow-hidden group">
+                        <img src="https://placehold.co/600x600/f59e0b/ffffff?text=Graphic+Tee" alt="Graphic Tee" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x600/e2e8f0/64748b?text=Tee+Image'">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h3 class="font-bold text-lg text-slate-900">Code & Coffee Tee</h3>
+                                <span class="text-indigo-600 font-bold">$28.00</span>
+                            </div>
+                            <p class="text-slate-500 text-sm mb-4">100% organic ring-spun cotton. Pre-shrunk for the ultimate relaxed student fit.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="addToCart('Code & Coffee Tee', 28.00)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                                🛒 Add to Cart
+                            </button>
+                            <button onclick="quickView('Code & Coffee Tee', '$28.00', '100% organic ring-spun cotton pre-shrunk tee.', 'https://placehold.co/600x600/f59e0b/ffffff?text=Graphic+Tee')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-2.5 rounded-xl transition text-sm" title="Quick View">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col" data-category="accessories">
+                    <div class="relative bg-slate-200 h-64 overflow-hidden group">
+                        <img src="https://placehold.co/600x600/ec4899/ffffff?text=Ceramic+Mug" alt="Ceramic Mug" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x600/e2e8f0/64748b?text=Mug+Image'">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h3 class="font-bold text-lg text-slate-900">Terminal Ceramic Mug</h3>
+                                <span class="text-indigo-600 font-bold">$18.50</span>
+                            </div>
+                            <p class="text-slate-500 text-sm mb-4">Microwave & dishwasher safe. 15oz capacity for those long late-night coding sessions.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="addToCart('Terminal Ceramic Mug', 18.50)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                                🛒 Add to Cart
+                            </button>
+                            <button onclick="quickView('Terminal Ceramic Mug', '$18.50', '15oz capacity ceramic mug for late coding sessions.', 'https://placehold.co/600x600/ec4899/ffffff?text=Ceramic+Mug')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-2.5 rounded-xl transition text-sm" title="Quick View">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col" data-category="apparel">
+                    <div class="relative bg-slate-200 h-64 overflow-hidden group">
+                        <span class="absolute top-3 left-3 bg-emerald-500 text-white text-xs px-2.5 py-1 rounded-md font-semibold z-10 shadow">Popular</span>
+                        <img src="https://placehold.co/600x600/06b6d4/ffffff?text=Dad+Cap" alt="Dad Cap" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x600/e2e8f0/64748b?text=Cap+Image'">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h3 class="font-bold text-lg text-slate-900">Embroidered Dad Cap</h3>
+                                <span class="text-indigo-600 font-bold">$24.00</span>
+                            </div>
+                            <p class="text-slate-500 text-sm mb-4">Adjustable strapback closure with breathable eyelets and custom minimalist logo.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="addToCart('Embroidered Dad Cap', 24.00)" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                                🛒 Add to Cart
+                            </button>
+                            <button onclick="quickView('Embroidered Dad Cap', '$24.00', 'Adjustable strapback closure with custom minimalist logo.', 'https://placehold.co/600x600/06b6d4/ffffff?text=Dad+Cap')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-2.5 rounded-xl transition text-sm" title="Quick View">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Breakpoints Specs Section -->
+    <section id="specs" class="py-16 bg-white border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span class="text-indigo-600 font-semibold text-sm uppercase tracking-wider">Lab Assignment Documentation</span>
+                <h2 class="text-3xl font-bold text-slate-900 tracking-tight mt-1">Responsive Breakpoints Reference</h2>
+                <p class="text-slate-600 mt-2">Required by instructor for practical verification and grade evaluation.</p>
+            </div>
+
+            <div class="bg-slate-900 text-slate-200 rounded-2xl overflow-hidden shadow-xl border border-slate-800">
+                <div class="bg-slate-800 px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+                    <span class="font-mono text-xs text-indigo-400 font-bold">TAILWIND_CONFIG_CHECKLIST.md</span>
+                    <span class="text-xs text-slate-400">Status: Verified 🟢</span>
+                </div>
+                <div class="p-6 overflow-x-auto">
+                    <table class="w-full text-left text-sm font-mono">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-slate-400">
+                                <th class="pb-3 font-semibold">Breakpoint</th>
+                                <th class="pb-3 font-semibold">Minimum Width</th>
+                                <th class="pb-3 font-semibold">Grid Columns Used</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800 text-slate-300">
+                            <tr>
+                                <td class="py-3 text-indigo-400">Default (Mobile)</td>
+                                <td class="py-3">&lt; 640px</td>
+                                <td class="py-3">1 Column (`grid-cols-1`)</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 text-indigo-400">sm:</td>
+                                <td class="py-3">&ge; 640px</td>
+                                <td class="py-3">2 Columns (`sm:grid-cols-2`)</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 text-indigo-400">md:</td>
+                                <td class="py-3">&ge; 768px</td>
+                                <td class="py-3">Tablet flex alignment active</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 text-indigo-400">lg:</td>
+                                <td class="py-3">&ge; 1024px</td>
+                                <td class="py-3">3 Columns (`lg:grid-cols-3`)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer with student vibe -->
+    <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6 pb-8 border-b border-slate-800">
+                <div class="text-center md:text-left">
+                    <span class="text-white font-bold text-lg">UrbanVibe Store Practical</span>
+                    <p class="text-sm mt-1 text-slate-400">Submitted for Web Development Practical Coursework.</p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 text-sm">
+                    <a href="#hero" class="hover:text-white transition">Back to Top ↑</a>
+                    <a href="#products" class="hover:text-white transition">Products</a>
+                    <a href="#specs" class="hover:text-white transition">Breakpoints</a>
+                </div>
+            </div>
+            <!-- Playful honest student footnote -->
+            <div class="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4 text-center sm:text-left">
+                <p>Made with ☕ and clean Tailwind CSS by <span class="text-slate-300 font-semibold">Alex</span> (Roll No. <span class="font-mono text-indigo-400">42</span>)</p>
+                <p class="italic">"Hope external CSS loading doesn't fail during viva presentation." 🙏</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart / Notification Modal -->
+    <div id="cart-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform transition-all">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-lg text-slate-900 flex items-center gap-2">🛒 Shopping Cart</h3>
+                <button onclick="toggleCartModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
+            </div>
+            <div id="cart-items-container" class="space-y-3 max-h-60 overflow-y-auto mb-4">
+                <p class="text-slate-500 text-sm text-center py-6">Your cart is currently empty. Add some products!</p>
+            </div>
+            <div class="border-t border-slate-100 pt-4 mb-6 flex justify-between items-center font-bold">
+                <span class="text-slate-700">Total:</span>
+                <span id="cart-total" class="text-indigo-600 text-lg">$0.00</span>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="toggleCartModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 rounded-xl transition text-sm">Continue Shopping</button>
+                <button onclick="checkout()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition text-sm shadow-md">Checkout 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick View Modal -->
+    <div id="quickview-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
+                <h3 id="qv-title" class="font-bold text-lg text-slate-900">Product Title</h3>
+                <button onclick="closeQuickView()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-6 mb-6">
+                <img id="qv-img" src="" alt="Product" class="w-full sm:w-48 h-48 object-cover rounded-xl bg-slate-100">
+                <div class="space-y-3">
+                    <div id="qv-price" class="text-indigo-600 font-bold text-xl">$0.00</div>
+                    <p id="qv-desc" class="text-slate-600 text-sm">Product description goes here.</p>
+                    <div class="inline-block bg-emerald-50 text-emerald-700 text-xs px-2.5 py-1 rounded font-medium">In Stock & Ready to Ship</div>
+                </div>
+            </div>
+            <button onclick="closeQuickView()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 rounded-xl transition text-sm">Close</button>
+        </div>
+    </div>
+
+    <!-- JavaScript for interactivity -->
+    <script>
+        // Responsive breakpoint detector for the hero card
+        function updateBreakpointIndicator() {
+            const width = window.innerWidth;
+            const indicator = document.getElementById('current-breakpoint');
+            if (width >= 1024) {
+                indicator.textContent = 'lg: (>=1024px)';
+            } else if (width >= 768) {
+                indicator.textContent = 'md: (>=768px)';
+            } else if (width >= 640) {
+                indicator.textContent = 'sm: (>=640px)';
+            } else {
+                indicator.textContent = 'default (<640px)';
+            }
+        }
+
+        window.addEventListener('resize', updateBreakpointIndicator);
+        window.addEventListener('DOMContentLoaded', updateBreakpointIndicator);
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Cart State & Functions
+        let cart = [];
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            updateCartUI();
+            
+            // Show subtle feedback message box
+            showNotification(`Added "${name}" to cart! 🛒`);
+        }
+
+        function updateCartUI() {
+            const countElem = document.getElementById('cart-count');
+            const mobileCountElem = document.getElementById('mobile-cart-count');
+            const container = document.getElementById('cart-items-container');
+            const totalElem = document.getElementById('cart-total');
+
+            countElem.textContent = cart.length;
+            mobileCountElem.textContent = cart.length;
+
+            if (cart.length === 0) {
+                container.innerHTML = `<p class="text-slate-500 text-sm text-center py-6">Your cart is currently empty. Add some products!</p>`;
+                totalElem.textContent = '$0.00';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                total += item.price;
+                html += `
+                    <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100 text-sm">
+                        <div>
+                            <div class="font-semibold text-slate-800">${item.name}</div>
+                            <div class="text-indigo-600 font-medium">$${item.price.toFixed(2)}</div>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 text-xs px-2 py-1 bg-red-50 rounded">Remove</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            totalElem.textContent = `$${total.toFixed(2)}`;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('cart-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Your cart is empty!');
+                return;
+            }
+            toggleCartModal();
+            showNotification('Order placed successfully! (Practical demo simulation) 🎉');
+            cart = [];
+            updateCartUI();
+        }
+
+        // Quick View Modal
+        function quickView(title, price, desc, img) {
+            document.getElementById('qv-title').textContent = title;
+            document.getElementById('qv-price').textContent = price;
+            document.getElementById('qv-desc').textContent = desc;
+            document.getElementById('qv-img').src = img;
+            document.getElementById('quickview-modal').classList.remove('hidden');
+        }
+
+        function closeQuickView() {
+            document.getElementById('quickview-modal').classList.add('hidden');
+        }
+
+        // Product Filtering
+        function filterProducts(category) {
+            // Update button styles
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm');
+                btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-200');
+            });
+            event.target.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-200');
+            event.target.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+
+            // Filter cards
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Custom Notification Toast
+        function showNotification(msg) {
+            const existingToast = document.getElementById('custom-toast');
+            if (existingToast) existingToast.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'custom-toast';
+            toast.className = 'fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm animate-bounce';
+            toast.innerHTML = `<span>✨</span> <span>${msg}</span>`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

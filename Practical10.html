@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker - Practical Assignment</title>
+    <!-- Importing Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4 font-sans">
+
+    <!-- Main Container -->
+    <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md mt-10 border-t-4 border-blue-500">
+        
+        <!-- Header Section -->
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Practical Assignment</h1>
+            <h2 class="text-xl text-blue-600">Personal Expense Tracker</h2>
+            <p class="text-sm text-gray-500 italic mt-1">Submitted by: Web Dev Student</p>
+        </div>
+
+        <!-- Form Section to Add Expenses -->
+        <div class="mb-6 bg-gray-50 p-4 rounded border border-gray-200">
+            <div class="mb-3">
+                <label for="descInput" class="block text-gray-700 text-sm font-bold mb-1">Expense Description:</label>
+                <input type="text" id="descInput" placeholder="e.g. Lunch, Books, Bus Ticket" class="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div class="mb-3">
+                <label for="amountInput" class="block text-gray-700 text-sm font-bold mb-1">Amount ($):</label>
+                <input type="number" id="amountInput" placeholder="0.00" class="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:border-blue-500">
+            </div>
+            
+            <!-- Error Message Box (Alternative to alert) -->
+            <div id="errorBox" class="hidden bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded mb-3 text-sm">
+                Please fill out both fields correctly!
+            </div>
+
+            <button id="addBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150">
+                Add Expense
+            </button>
+        </div>
+
+        <!-- Total Display -->
+        <div class="flex justify-between items-center mb-4 pb-2 border-b-2 border-gray-200">
+            <h3 class="text-lg font-bold text-gray-700">Total Spent:</h3>
+            <h3 class="text-xl font-extrabold text-red-600">$<span id="totalDisplay">0.00</span></h3>
+        </div>
+
+        <!-- List Section to Show Expenses -->
+        <div>
+            <h4 class="text-md font-semibold text-gray-600 mb-2">Transaction History:</h4>
+            <ul id="expenseList" class="space-y-2">
+                <!-- List items will be added here by JavaScript -->
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        // Step 1: Get all the necessary HTML elements using their IDs
+        const descInput = document.getElementById('descInput');
+        const amountInput = document.getElementById('amountInput');
+        const addBtn = document.getElementById('addBtn');
+        const expenseList = document.getElementById('expenseList');
+        const totalDisplay = document.getElementById('totalDisplay');
+        const errorBox = document.getElementById('errorBox');
+
+        // Step 2: Initialize a variable to keep track of the total expense amount
+        let runningTotal = 0;
+
+        // Step 3: Create a function that runs when the 'Add Expense' button is clicked
+        addBtn.addEventListener('click', function() {
+            
+            // Step 4: Get the values typed by the user
+            const description = descInput.value;
+            // Convert the amount string to a decimal number
+            const amount = parseFloat(amountInput.value);
+
+            // Step 5: Validation - Check if inputs are empty or invalid
+            // Note: Using an inline error box instead of alert() for better user experience
+            if (description.trim() === '' || isNaN(amount) || amount <= 0) {
+                errorBox.classList.remove('hidden'); // Show error
+                return; // Stop the function here
+            } else {
+                errorBox.classList.add('hidden'); // Hide error if inputs are good
+            }
+
+            // Step 6: Create a new list item (li) for the expense
+            const listItem = document.createElement('li');
+            listItem.className = "flex justify-between items-center bg-gray-50 p-3 rounded border border-gray-200 shadow-sm";
+
+            // Step 7: Put content inside the list item
+            const textSpan = document.createElement('span');
+            textSpan.className = "text-gray-800 font-medium";
+            textSpan.textContent = description + " - $" + amount.toFixed(2);
+
+            // Step 8: Create a delete button for this specific item
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = "Delete";
+            deleteBtn.className = "bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-1 px-2 rounded";
+            
+            // Step 9: Add a click event to the delete button
+            deleteBtn.addEventListener('click', function() {
+                // Subtract the amount from the total
+                runningTotal = runningTotal - amount;
+                
+                // Update the total display on the screen
+                totalDisplay.textContent = runningTotal.toFixed(2);
+                
+                // Remove the list item from the HTML
+                expenseList.removeChild(listItem);
+            });
+
+            // Step 10: Attach the text and delete button to the list item
+            listItem.appendChild(textSpan);
+            listItem.appendChild(deleteBtn);
+
+            // Step 11: Add the fully built list item to the main ul list
+            expenseList.appendChild(listItem);
+
+            // Step 12: Update the running total and show it on the screen
+            runningTotal = runningTotal + amount;
+            totalDisplay.textContent = runningTotal.toFixed(2);
+
+            // Step 13: Clear the input fields for the next expense
+            descInput.value = '';
+            amountInput.value = '';
+            
+            // Put cursor back in the description box
+            descInput.focus();
+        });
+    </script>
+</body>
+</html>
